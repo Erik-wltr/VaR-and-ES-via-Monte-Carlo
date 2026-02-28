@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import datetime as dt
 import pandas as pd
 import yfinance as yf
-from scipy.stats import norm
 
 #sets up start and end dates
 years = 15
@@ -86,11 +85,11 @@ def plot():
 
 
 def main():
-    print("The initial portfolio value is: "+ str(portfolio_value)+"$")
-    print("The VaR for a period of" , str(days), "days and a confidence interval of", str(confidence_interval*100), "% is", end =" ")
-    print(str(round(VaR,2))+"$")
-    print("The expected Shortfall is " + str(round(calculate_ES(scenarioReturns, VaR),2))+"$")
-    #plot()
+    print("The initial portfolio value is: "+ str(portfolio_value)+"$.")
+    print("The VaR for a period of" , str(days), "days and a confidence interval of", str(int(confidence_interval*100))+ "% is", end =" ")
+    print(str(round(VaR,2))+"$.")
+    print("The expected Shortfall is " + str(round(-calculate_ES(scenarioReturns, VaR),2))+"$.")
+    plot()
     return
 
 
