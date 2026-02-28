@@ -13,6 +13,14 @@ startDate= endDate - dt.timedelta(days = 365*years)
 #tickers 
 tickers = ['SPY', 'BND', 'GLD', 'QQQ', 'VWO', 'DUOL']
 
+#simulations parameter
+portfolio_value = 100000
+
+days = 10
+confidence_interval = 0.95
+
+simulation = 10000
+
 #download the dailey adjusted close prices 
 adj_close_df = pd.DataFrame()
 for ticker in tickers: 
@@ -39,17 +47,14 @@ def random_z_score():
     return np.random.normal(0,1)
 
 #Simulation
-portfolio_value = 100000
+
 weights = np.array([1/len(tickers)]*len(tickers))
 portfolio_expected_return = expected_return(weights, ln_returns)
 portfolio_standard_deviation = standard_deviation(weights, cov_matrix)
 
-days = 10
-
 def scenario_gain_loss(port_value, port_e_r, port_s_d, z_score, days):
     return port_value * port_e_r * days + port_value * port_s_d * z_score * np.sqrt(days)
 
-simulation = 10000
 scenarioReturns = []
 
 for i in range(simulation):
@@ -57,7 +62,7 @@ for i in range(simulation):
     scenarioReturns.append(scenario_gain_loss(portfolio_value, portfolio_expected_return , portfolio_standard_deviation , z_score, days))
 
 #evaluation
-confidence_interval = 0.95
+
 VaR = -np.percentile(scenarioReturns, 100*(1-confidence_interval))
 
 def plot():
@@ -72,9 +77,8 @@ def plot():
 
 
 def main():
-    print("portfolio value", portfolio_value)
-    print("days:", days)
-    print("confidence level:", confidence_interval)
+    print("Initial portfolio value:"+ str(portfolio_value))
+    print("The VaR for a period of" , str(days), "days and a confidence intervall of", str(confidence_interval*100), "% is")
     print(VaR)
     plot()
     return
